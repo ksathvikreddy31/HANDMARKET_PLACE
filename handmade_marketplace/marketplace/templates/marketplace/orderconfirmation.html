@@ -1,0 +1,39 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation - Handmade Gifts Marketplace</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'styles.css' %}">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">Handmade Gifts</div>
+            <div class="nav-links">
+                {% if user.is_authenticated %}
+                    <span>Welcome, {{ user.username }}</span>
+                    <a href="{% url 'cart' %}">Cart</a>
+                    <a href="{% url 'logout' %}">Logout</a>
+                {% else %}
+                    <a href="{% url 'login' %}">Sign In</a>
+                    <a href="{% url 'register' %}">Sign Up</a>
+                {% endif %}
+            </div>
+        </nav>
+    </header>
+
+    <section class="order-confirmation">
+        <h1>Order Placed!</h1>
+        {% if message %}
+            <p>{{ message }}</p>
+        {% else %}
+            <p>Thank you for ordering <strong>{{ product.name }}</strong>.</p>
+            <p>Price: ₹{{ product.price }}</p>
+        {% endif %}
+        <a href="{% url 'home' %}" class="btn">Back to Home</a>
+    </section>
+</body>
+</html>

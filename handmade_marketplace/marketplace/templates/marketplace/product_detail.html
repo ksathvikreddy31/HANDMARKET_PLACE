@@ -1,0 +1,49 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ product.name }} - Handmade Gifts Marketplace</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <header class="bg-white shadow">
+        <nav class="container mx-auto flex justify-between items-center p-4">
+            <div class="logo text-xl font-bold">Handmade Gifts</div>
+            <div class="nav-links flex space-x-4">
+                {% if user.is_authenticated %}
+                    <span class="text-gray-700">Welcome, {{ user.username }}</span>
+                    <a href="{% url 'cart' %}" class="text-blue-500 hover:underline">Cart</a>
+                    <a href="{% url 'logout' %}" class="text-blue-500 hover:underline">Logout</a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="text-blue-500 hover:underline">Sign In</a>
+                    <a href="{% url 'register' %}" class="text-blue-500 hover:underline">Sign Up</a>
+                {% endif %}
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto max-w-3xl p-6">
+        <section class="product-detail bg-white shadow-md rounded-lg overflow-hidden">
+            <div class="flex flex-col md:flex-row">
+                <div class="product-image-container w-full md:w-1/2">
+                    <img src="{{ product.image_url }}" alt="{{ product.name }}" class="w-full h-auto object-cover">
+                </div>
+                <div class="product-info w-full md:w-1/2 p-6">
+                    <h1 class="text-2xl font-bold mb-2">{{ product.name }}</h1>
+                    <p class="product-description text-gray-700 mb-4"><strong>Description:</strong> {{ product.description }}</p>
+                    <p class="product-price text-lg font-semibold mb-4"><strong>Price:</strong> ₹{{ product.price }}</p>
+                    <p class="text-gray-500 mb-4"><strong>Category:</strong> {{ product.category }}</p>
+                    <div class="product-actions flex space-x-4">
+                        <a href="{% url 'add_to_cart' product_id=product.id %}" class="cart-btn bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Add to Cart</a>
+                        <a href="{% url 'place_order' product_id=product.id %}" class="buy-btn bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Buy Now</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

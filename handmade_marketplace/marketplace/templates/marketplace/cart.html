@@ -1,0 +1,53 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart - Handmade Gifts Marketplace</title>
+    <!-- <link rel="stylesheet" type="text/css" href="{% static 'styles.css' %}"> -->
+    <link rel="stylesheet" type="text/css" href="{% static 'styles4.css' %}">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">Handmade Gifts</div>
+            <div class="nav-links">
+                {% if user.is_authenticated %}
+                    <span>Welcome, {{ user.username }}</span>
+                    <a href="{% url 'cart' %}">Cart</a>
+                    <a href="{% url 'logout' %}">Logout</a>
+                {% else %}
+                    <a href="{% url 'login' %}">Sign In</a>
+                    <a href="{% url 'register' %}">Sign Up</a>
+                {% endif %}
+            </div>
+        </nav>
+    </header>
+
+    <section class="cart">
+        <h1>Your Cart</h1>
+        {% if cart_items %}
+            <div class="cart-items">
+                {% for item in cart_items %}
+                    <div class="cart-item">
+                        <img src="{{ item.product.image_url }}" alt="{{ item.product.name }}" class="cart-item-image">
+                        <div class="cart-item-info">
+                            <h3>{{ item.product.name }}</h3>
+                            <p>{{ item.product.description }}</p>
+                            <p>Price: ₹{{ item.product.price }}</p>
+                            <p>Category: {{ item.product.category }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="cart-total">
+                <p>Total: ₹{{ total_price }}</p>
+                <a href="{% url 'place_order_cart' %}" class="buy-btn">Buy Now</a>
+            </div>
+        {% else %}
+            <p class="cart-empty">Your cart is empty.</p>
+        {% endif %}
+    </section>
+</body>
+</html>

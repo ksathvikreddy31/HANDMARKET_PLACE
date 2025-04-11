@@ -1,0 +1,67 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Handmade Gifts Marketplace</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'styles.css' %}">
+</head>
+<body>
+    <!-- Header / Nav -->
+    <header>
+        <nav>
+            <div class="logo">Handmade Gifts</div>
+            <!-- Search Form -->
+            <form method="GET" action="{% url 'home' %}" class="search-form">
+                <input type="text" name="q" placeholder="Search for anything" value="{{ search_query }}">
+                <button type="submit" class="search-btn">Search</button>
+            </form>
+            <div class="nav-links">
+                {% if user.is_authenticated %}
+                    <span>Welcome, {{ user.username }}</span>
+                    <a href="{% url 'cart' %}">Cart</a>
+                    <a href="{% url 'logout' %}">Logout</a>
+                {% else %}
+                    <a href="{% url 'login' %}">Sign In</a>
+                    <a href="{% url 'register' %}">Sign Up</a>
+                {% endif %}
+            </div>
+        </nav>
+    </header>
+
+    <!-- Banner Section -->
+    <section class="banner">
+        <div class="banner-overlay"></div>
+        <div class="banner-content">
+            <h1>Everything for Handmade Gifts!</h1>
+            <p>Celebrate with unique, handcrafted items.</p>
+            <!-- <button>Shop Now</button> -->
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="products">
+        <h2>
+            {% if search_query %}
+                Search Results for "{{ search_query }}"
+            {% else %}
+                These items are currently available for purchase in the market
+            {% endif %}
+        </h2>
+        <div class="product-grid">
+            {% for product in products %}
+                <div class="product-card">
+                    <img src="{{ product.image_url }}" alt="{{ product.name }}" class="product-image">
+                    <h3>{{ product.name }}</h3>
+                    <p>Price: ₹{{ product.price }}</p>
+                    <a href="{% url 'product_detail' product_id=product.id %}" class="buy-btn">View</a>
+                </div>
+            {% empty %}
+                <p>No products found{% if search_query %} for "{{ search_query }}"{% endif %}.</p>
+            {% endfor %}
+        </div>
+    </section>
+</body>
+</html>
